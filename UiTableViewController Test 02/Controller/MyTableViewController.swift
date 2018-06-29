@@ -1,32 +1,8 @@
 import UIKit
 
-class MyTableViewController: UITableViewController {
+class MyTableViewController: UITableViewController,UISearchBarDelegate {
     
-    /*
-    var foodStoreNames = ["늘해랑", "번개반점", "아딸", "왕짜장", "토마토 도시락", "홍콩반점"]
-    var foodStoreThumbnail = ["01", "02", "03", "04", "05", "06"]
-    var foodStoreAddress = ["부산광역시 부산진구 양정1동 350-1",
-                            "부산광역시 부산진구 양정동 418-282",
-                            "부산광역시 부산진구 양정동 393-18",
-                            "부산광역시 부산진구 양정1동 356-22",
-                            "부산광역시 부산진구 양정1동 산19-8",
-                            "부산광역시 부산진구 양정동 353-38"]
-    var foodStoreTel = ["051-863-6997",
-                        "051-852-9969",
-                        "051-852-9969",
-                        "051-852-9969",
-                        "051-852-9969",
-                        "051-853-0410"]
-    var foodMenus = ["수육백반, 돼지국밥, 순대국밥, 내장국밥",
-                     "짜장면, 짬뽕, 짬짜면, 탕수육, 탕짜면, 군만두, 양장피",
-                     "떡볶이, 오뎅, 떡강정, 핫도그, 튀김",
-                     "짜장면, 짬뽕, 짬짜면, 탕수육, 볶짜면, 군만두, 양장피",
-                     "치킨마요, 참치마요, 돈불와퍼, 돈치와퍼, 돈까스카레",
-                     "짬뽕, 짜장면, 짬뽕밥, 볶음밥, 탕수육, 군만두"
-    ]
-    
-    var foodStoreType = ["돼지국밥집", "중화요리", "분식점", "중화요리", "도시락", "중화요리"]
-   */
+    @IBOutlet weak var SearchBar: UISearchBar!
     
     // 데이터 클래스 객체 생성
     var foodStores:[FoodStore] = [
@@ -38,9 +14,11 @@ class MyTableViewController: UITableViewController {
         FoodStore(name: "홍콩반점", image: "06", address: "부산광역시 부산진구 양정동 353-38", tel: "051-863-6997", menu: "짬뽕, 짜장면, 짬뽕밥, 볶음밥, 탕수육, 군만두", type: "중화요리"),
     ]
     
+    var currentFoodStores = FoodStores:[FoodStore]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setUpSearchBar()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -55,11 +33,33 @@ class MyTableViewController: UITableViewController {
         return 1
     }
     
+    private func setUpSearchBar(){
+        SearchBar.delegate = self
+    }
+    
+    // Search Bar
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
+        guard !searchText.isEmpty else {
+            
+            currentAnimalArray = animalArray
+            table.reloadData()
+            return
+        }
+        currentAnimalArray = animalArray.filter({ animal -> Bool in
+            animal.name.lowercased().contains(searchText.lowercased())
+        })
+        table.reloadData()
+    }
+    
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //return foodStoreNames.count
         return foodStores.count
     }
+    
+    
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

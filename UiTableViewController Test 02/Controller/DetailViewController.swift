@@ -35,9 +35,49 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return 1
     }
     
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+
+        case 1:
+            
+            //전화걸기를 위한 UIAlertController
+            let alertController = UIAlertController(title: "전화걸기", message: "전화번호 : \(self.tel1)", preferredStyle: UIAlertControllerStyle.alert)
+            
+            let okAction = UIAlertAction(title: "전화걸기", style: UIAlertActionStyle.destructive){(action: UIAlertAction) in
+                
+                let url = NSURL(string: "tel://\(self.tel1)")!
+                
+                if #available(iOS 10.0, *){
+                    UIApplication.shared.open(url as URL)
+                } else {
+                    UIApplication.shared.openURL(url as URL)
+                }
+                
+            }
+            
+            let cancelButton = UIAlertAction(title: "취소", style: UIAlertActionStyle.cancel, handler: nil)
+            
+            alertController.addAction(okAction)
+            alertController.addAction(cancelButton)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+            
+            
+        default:
+            print("")
+        }
+    }
+    
+    
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
